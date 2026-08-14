@@ -1,0 +1,6 @@
+{
+  "name": "NaijaNav",
+  "description": "Localized Nigerian turn-by-turn navigation with landmark-based Pidgin-flavored audio cues and crowd-sourced historical road intelligence.",
+  "requestFramePermissions": ["microphone", "geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
