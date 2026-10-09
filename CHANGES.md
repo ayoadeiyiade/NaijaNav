@@ -43,7 +43,7 @@
 - Simulated vehicle position is straight-line interpolation, not road-snapped.
 
 ## Map and UI redesign
-- Map now runs on Leaflet with CARTO dark tiles (OpenStreetMap data). No API key, no billing account.
+- Map runs on Leaflet with standard OpenStreetMap tiles, darkened with a CSS filter. No API key, no billing account. (CARTO dark tiles were tried first but now require a key.)
 - Removed the Google Maps dependency, key modal, and canvas fallback.
 - Visual redesign: dark asphalt base, danfo yellow accent, rust red for alerts, green for verified.
   Oswald for headlines and numbers, Work Sans for body text.

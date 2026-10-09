@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { MapContainer as LeafletMap, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
+import { MapContainer as LeafletMap, TileLayer, Marker, Popup, Polyline, ZoomControl } from 'react-leaflet';
 import L from 'leaflet';
 import { RouteCorridor, Landmark, RoadHazard } from '../types';
 import { MapPin, Compass, Sparkles } from 'lucide-react';
@@ -78,18 +78,21 @@ export const MapContainer: React.FC<MapContainerProps> = ({
       <div className="flex-1 relative">
         <LeafletMap
           key={corridor.id}
-          center={[corridor.center.lat, corridor.center.lng]}
-          zoom={corridor.zoom}
+          bounds={routeLine}
+          boundsOptions={{ padding: [70, 70] }}
+          zoomControl={false}
           style={{ width: '100%', height: '100%' }}
           scrollWheelZoom
         >
-          {/* CARTO's free dark basemap, built on OpenStreetMap data, no key
-              or billing account required. Matches the app's dark theme
-              instead of forcing a bright default map under a dark UI. */}
+          {/* Standard OpenStreetMap tiles: no key or account needed. The dark
+              look comes from a CSS filter on .leaflet-tile-pane (see
+              index.css), not from a different tile provider. */}
           <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+            maxZoom={19}
           />
+          <ZoomControl position="bottomright" />
 
           <Polyline positions={routeLine} pathOptions={{ color: '#FFC233', weight: 4, opacity: 0.9 }} />
 

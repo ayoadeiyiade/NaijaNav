@@ -34,3 +34,26 @@ body {
 .leaflet-container {
   background: var(--color-asphalt);
 }
+
+/* Darken the standard OSM tiles to match the dark theme. Invert flips the
+   light map dark, hue-rotate puts blues and greens back near their
+   original hues. Markers and the route line sit in other panes, so they
+   keep their real colors. */
+.leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.85) saturate(0.6);
+}
+.leaflet-control-zoom a {
+  background: var(--color-asphalt-raised);
+  color: var(--color-parchment);
+  border-color: var(--color-asphalt-line);
+}
+.leaflet-control-zoom a:hover {
+  background: var(--color-asphalt-line);
+}
+.leaflet-control-attribution {
+  background: rgba(21, 19, 15, 0.8) !important;
+  color: var(--color-parchment-dim) !important;
+}
+.leaflet-control-attribution a {
+  color: var(--color-danfo) !important;
+}
