@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Mic, Square, RefreshCw, Sparkles, Volume2 } from 'lucide-react';
+import { Mic, Square, RefreshCw, Volume2 } from 'lucide-react';
 
 interface VoiceNoteRecorderProps {
   onAudioCaptured: (audioBase64: string, mimeType: string, textFallback?: string) => void;
@@ -91,29 +91,25 @@ export const VoiceNoteRecorder: React.FC<VoiceNoteRecorderProps> = ({ onAudioCap
   };
 
   return (
-    <div className="bg-[#FAF9F6] p-4 rounded-2xl border border-neutral-200 space-y-4">
-      <div className="flex items-center justify-between">
-        <span className="text-[10px] font-extrabold text-black uppercase tracking-widest flex items-center space-x-1">
-          <Mic className="w-3.5 h-3.5 text-black" />
-          <span>Voice-Note Incident Recorder</span>
-        </span>
-        <span className="text-[10px] font-mono text-neutral-500 font-bold">Speak Pidgin or English</span>
+    <div className="bg-asphalt p-4 rounded-md space-y-4">
+      <div className="flex items-center justify-between text-xs text-parchment-dim">
+        <span>Speak Pidgin or English</span>
       </div>
 
-      {micError && <p className="text-xs text-red-700 bg-red-50 border border-red-200 rounded-xl px-3 py-2">{micError}</p>}
+      {micError && <p className="text-xs text-rust bg-rust/10 rounded px-3 py-2">{micError}</p>}
 
       {!audioUrl && !isRecording && (
         <div className="text-center py-4 space-y-3">
           <button
             type="button"
             onClick={startRecording}
-            className="w-20 h-20 mx-auto rounded-full bg-black hover:bg-neutral-800 hover:scale-105 active:scale-95 transition-all flex items-center justify-center text-white shadow-xl group"
+            className="w-20 h-20 mx-auto rounded-full bg-danfo hover:bg-danfo-dim transition-colors flex items-center justify-center text-asphalt"
           >
-            <Mic className="w-9 h-9 group-hover:animate-bounce text-white" />
+            <Mic className="w-9 h-9" />
           </button>
-          <p className="text-xs text-neutral-700 font-medium">
-            Tap button & speak: <br />
-            <em className="text-black font-bold">"Oga, water don full under bridge for Fadeyi o!"</em>
+          <p className="text-sm text-parchment-dim">
+            Tap and speak, for example<br />
+            <em className="text-parchment not-italic font-medium">Oga, water don full under bridge for Fadeyi o</em>
           </p>
         </div>
       )}
@@ -121,8 +117,8 @@ export const VoiceNoteRecorder: React.FC<VoiceNoteRecorderProps> = ({ onAudioCap
       {isRecording && (
         <div className="text-center py-4 space-y-3">
           <div className="flex items-center justify-center space-x-2">
-            <span className="w-3 h-3 rounded-full bg-red-600 animate-ping" />
-            <span className="text-base font-extrabold text-red-600 font-mono">
+            <span className="w-3 h-3 rounded-full bg-rust animate-pulse" />
+            <span className="text-base font-medium text-rust">
               00:{recordingSeconds < 10 ? `0${recordingSeconds}` : recordingSeconds}
             </span>
           </div>
@@ -131,7 +127,7 @@ export const VoiceNoteRecorder: React.FC<VoiceNoteRecorderProps> = ({ onAudioCap
             {[40, 70, 30, 90, 50, 80, 20, 60, 100, 40].map((h, i) => (
               <span
                 key={i}
-                className="w-1.5 bg-black rounded-full animate-pulse"
+                className="w-1.5 bg-danfo rounded-full animate-pulse"
                 style={{ height: `${h}%`, animationDelay: `${i * 0.1}s` }}
               />
             ))}
@@ -140,37 +136,35 @@ export const VoiceNoteRecorder: React.FC<VoiceNoteRecorderProps> = ({ onAudioCap
           <button
             type="button"
             onClick={stopRecording}
-            className="px-5 py-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-black font-bold text-xs flex items-center justify-center space-x-2 mx-auto border border-neutral-300 shadow-sm"
+            className="px-5 py-2 rounded-md bg-asphalt-raised hover:bg-asphalt-line text-parchment font-medium text-sm flex items-center justify-center space-x-2 mx-auto"
           >
-            <Square className="w-4 h-4 fill-current text-red-600" />
-            <span>Stop Recording</span>
+            <Square className="w-4 h-4 fill-current text-rust" />
+            <span>Stop recording</span>
           </button>
         </div>
       )}
 
       {audioUrl && (
-        <div className="space-y-3">
-          <div className="bg-white p-3 rounded-xl border border-neutral-200 flex items-center justify-between shadow-sm">
-            <div className="flex items-center space-x-2">
-              <Volume2 className="w-4 h-4 text-black" />
-              <span className="text-xs font-bold text-black">Recorded Voice Note ({recordingSeconds}s)</span>
-            </div>
-            <audio src={audioUrl} controls className="h-8 max-w-[200px]" />
-            <button type="button" onClick={resetRecording} className="p-1.5 text-neutral-500 hover:text-black">
-              <RefreshCw className="w-4 h-4" />
-            </button>
+        <div className="bg-asphalt-raised p-3 rounded-md flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <Volume2 className="w-4 h-4 text-danfo" />
+            <span className="text-sm text-parchment">Recorded ({recordingSeconds}s)</span>
           </div>
+          <audio src={audioUrl} controls className="h-8 max-w-[180px]" />
+          <button type="button" onClick={resetRecording} className="p-1.5 text-parchment-dim hover:text-parchment">
+            <RefreshCw className="w-4 h-4" />
+          </button>
         </div>
       )}
 
-      <div className="space-y-1 pt-2 border-t border-neutral-200">
-        <label className="text-[11px] text-neutral-600 font-medium block">Or type incident note in Pidgin/English:</label>
+      <div className="space-y-1 pt-2 border-t border-asphalt-line">
+        <label className="text-xs text-parchment-dim block">Or type a note in Pidgin or English</label>
         <input
           type="text"
           value={typedFallback}
           onChange={(e) => setTypedFallback(e.target.value)}
-          placeholder="e.g. Agbero dey collect ticket for Ojota turning..."
-          className="w-full bg-white border border-neutral-300 rounded-xl px-3 py-2 text-xs text-black focus:outline-none focus:border-black"
+          placeholder="Agbero dey collect ticket for Ojota turning"
+          className="w-full bg-asphalt-raised rounded-md px-3 py-2 text-sm text-parchment placeholder:text-parchment-dim focus:outline-none focus:ring-1 focus:ring-danfo"
         />
       </div>
 
@@ -178,10 +172,9 @@ export const VoiceNoteRecorder: React.FC<VoiceNoteRecorderProps> = ({ onAudioCap
         type="button"
         onClick={handleSubmit}
         disabled={isProcessing || (!audioBase64 && !typedFallback.trim())}
-        className="w-full py-2.5 rounded-xl bg-black hover:bg-neutral-800 disabled:opacity-50 text-white font-black text-xs uppercase tracking-wider shadow-md flex items-center justify-center space-x-2 transition-all"
+        className="w-full py-2.5 rounded-md bg-danfo hover:bg-danfo-dim disabled:opacity-40 disabled:hover:bg-danfo text-asphalt font-semibold text-sm transition-colors"
       >
-        <Sparkles className="w-4 h-4 text-white" />
-        <span>{isProcessing ? 'Extracting Report Details...' : 'Process Report'}</span>
+        {isProcessing ? 'Extracting report details' : 'Process report'}
       </button>
     </div>
   );

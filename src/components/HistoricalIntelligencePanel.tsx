@@ -8,9 +8,7 @@ import {
   Octagon,
   Clock,
   ThumbsUp,
-  Filter,
   CheckCircle2,
-  TrendingUp,
   MapPin,
   Mic,
 } from 'lucide-react';
@@ -38,73 +36,64 @@ export const HistoricalIntelligencePanel: React.FC<HistoricalIntelligencePanelPr
   const getCategoryBadge = (cat: HazardCategory) => {
     switch (cat) {
       case 'market_day':
-        return { label: 'Market Day Lockdown', icon: Calendar, color: 'bg-purple-500/20 text-purple-300 border-purple-500/30' };
+        return { label: 'Market day', icon: Calendar };
       case 'agbero_checkpoint':
-        return { label: 'Agbero / Ticket Spot', icon: Octagon, color: 'bg-amber-500/20 text-amber-300 border-amber-500/30' };
+        return { label: 'Agbero / ticket spot', icon: Octagon };
       case 'flood_zone':
-        return { label: 'Rainy Flood Zone', icon: Umbrella, color: 'bg-blue-500/20 text-blue-300 border-blue-500/30' };
+        return { label: 'Flood zone', icon: Umbrella };
       case 'bad_spot':
-        return { label: 'Deep Pothole Crater', icon: AlertTriangle, color: 'bg-red-500/20 text-red-300 border-red-500/30' };
+        return { label: 'Pothole', icon: AlertTriangle };
       case 'gridlock':
-        return { label: 'Total Gridlock', icon: Clock, color: 'bg-rose-500/20 text-rose-300 border-rose-500/30' };
+        return { label: 'Gridlock', icon: Clock };
       default:
-        return { label: 'Road Hazard', icon: ShieldAlert, color: 'bg-slate-700 text-slate-300 border-slate-600' };
+        return { label: 'Hazard', icon: ShieldAlert };
     }
   };
 
   return (
     <div className="space-y-6">
-      <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-sm relative overflow-hidden">
-        <div className="max-w-3xl space-y-2">
-          <div className="flex items-center space-x-2">
-            <span className="px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest bg-black text-white flex items-center space-x-1">
-              <TrendingUp className="w-3.5 h-3.5" />
-              <span>Predictive Nigerian Road Intelligence</span>
-            </span>
-          </div>
-          <h2 className="text-2xl font-black text-black">Historical Road Patterns & Crowd Intelligence</h2>
-          <p className="text-sm text-neutral-600">
-            Standard maps only react once traffic has already jammed. This panel surfaces market day lockdowns,
-            recurring agbero checkpoints, rainy season flood dips, and known road craters ahead of time, seeded
-            manually for now, growing from driver reports over time.
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+        <div className="space-y-1 max-w-2xl">
+          <h2 className="font-display text-3xl text-parchment">Road intelligence</h2>
+          <p className="text-sm text-parchment-dim">
+            Standard maps only react once traffic has already jammed. This surfaces market day lockdowns,
+            recurring checkpoints, flood dips and known craters ahead of time, seeded manually for now,
+            growing from driver reports over time.
           </p>
         </div>
-
         <button
           onClick={onOpenReportModal}
-          className="mt-4 sm:mt-0 sm:absolute sm:top-6 sm:right-6 px-4 py-2.5 rounded-xl bg-black hover:bg-neutral-800 text-white font-black text-xs uppercase tracking-wider shadow-md flex items-center space-x-1.5"
+          className="px-4 py-2.5 rounded-md bg-rust hover:bg-rust/90 text-parchment font-semibold text-sm flex items-center space-x-1.5 flex-shrink-0"
         >
           <Mic className="w-4 h-4" />
-          <span>Report Matter Now</span>
+          <span>Report matter</span>
         </button>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-4 bg-white p-3 rounded-2xl border border-neutral-200 shadow-sm">
-        <div className="flex items-center space-x-2">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center space-x-1 bg-asphalt-raised p-1 rounded-md">
           <button
             onClick={() => setActiveTab('historical')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-              activeTab === 'historical' ? 'bg-black text-white shadow-sm' : 'text-neutral-600 hover:text-black bg-neutral-100'
+            className={`px-4 py-2 rounded text-sm font-medium transition-colors ${
+              activeTab === 'historical' ? 'bg-danfo text-asphalt' : 'text-parchment-dim hover:text-parchment'
             }`}
           >
-            Historical & Predictive Hazards ({filteredHazards.length})
+            Known hazards ({filteredHazards.length})
           </button>
-
           <button
             onClick={() => setActiveTab('live_crowdsourced')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-              activeTab === 'live_crowdsourced' ? 'bg-black text-white shadow-sm' : 'text-neutral-600 hover:text-black bg-neutral-100'
+            className={`px-4 py-2 rounded text-sm font-medium transition-colors ${
+              activeTab === 'live_crowdsourced' ? 'bg-danfo text-asphalt' : 'text-parchment-dim hover:text-parchment'
             }`}
           >
-            Driver Voice Reports ({reports.length})
+            Driver reports ({reports.length})
           </button>
         </div>
 
         <div className="flex flex-wrap items-center gap-1.5 text-xs">
-          <Filter className="w-3.5 h-3.5 text-neutral-500 mr-1" />
           {[
-            { id: 'all', label: 'All Intelligence' },
-            { id: 'market_day', label: 'Market Days' },
+            { id: 'all', label: 'All' },
+            { id: 'market_day', label: 'Market days' },
             { id: 'agbero_checkpoint', label: 'Agberos' },
             { id: 'flood_zone', label: 'Flooding' },
             { id: 'bad_spot', label: 'Potholes' },
@@ -112,8 +101,8 @@ export const HistoricalIntelligencePanel: React.FC<HistoricalIntelligencePanelPr
             <button
               key={cat.id}
               onClick={() => setSelectedCategory(cat.id)}
-              className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
-                selectedCategory === cat.id ? 'bg-black text-white' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+              className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
+                selectedCategory === cat.id ? 'bg-danfo text-asphalt' : 'bg-asphalt-raised text-parchment-dim hover:text-parchment'
               }`}
             >
               {cat.label}
@@ -123,51 +112,44 @@ export const HistoricalIntelligencePanel: React.FC<HistoricalIntelligencePanelPr
       </div>
 
       {activeTab === 'historical' ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {filteredHazards.length === 0 && (
-            <p className="text-sm text-neutral-500 italic col-span-2">No hazards seeded for this corridor yet.</p>
+            <p className="text-sm text-parchment-dim italic col-span-2">No hazards seeded for this corridor yet.</p>
           )}
           {filteredHazards.map((hz) => {
             const badge = getCategoryBadge(hz.category);
             const Icon = badge.icon;
             return (
-              <div
-                key={hz.id}
-                className="bg-white border border-neutral-200 hover:border-black/30 rounded-2xl p-5 space-y-3 transition-all hover:shadow-md flex flex-col justify-between"
-              >
+              <div key={hz.id} className="bg-asphalt-raised rounded-md p-5 space-y-3 flex flex-col justify-between">
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className={`px-2.5 py-1 rounded-md text-[10px] font-extrabold uppercase tracking-wider border flex items-center space-x-1 ${badge.color}`}>
-                      <Icon className="w-3 h-3" />
+                    <span className="flex items-center space-x-1.5 text-xs font-medium text-danfo">
+                      <Icon className="w-3.5 h-3.5" />
                       <span>{badge.label}</span>
                     </span>
-                    <span className="text-[11px] font-mono font-bold text-neutral-600 bg-neutral-100 px-2 py-0.5 rounded">
-                      {hz.timePattern}
-                    </span>
+                    <span className="text-xs text-parchment-dim">{hz.timePattern}</span>
                   </div>
 
-                  <h3 className="text-base font-black text-black">{hz.title}</h3>
-                  <p className="text-xs text-neutral-700 leading-relaxed font-medium">{hz.description}</p>
+                  <h3 className="text-base font-semibold text-parchment">{hz.title}</h3>
+                  <p className="text-sm text-parchment-dim">{hz.description}</p>
 
-                  <div className="bg-[#FAF9F6] p-3 rounded-xl border border-neutral-200">
-                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-black block">Pidgin Driver Warning:</span>
-                    <p className="text-xs font-bold text-neutral-900 italic">"{hz.pidginAlertText}"</p>
+                  <div className="bg-asphalt p-3 rounded">
+                    <span className="text-xs text-danfo block mb-0.5">Pidgin warning</span>
+                    <p className="text-sm text-parchment">{hz.pidginAlertText}</p>
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-neutral-200 flex items-center justify-between text-xs text-neutral-600">
+                <div className="pt-3 border-t border-asphalt-line flex items-center justify-between text-xs text-parchment-dim">
                   <div className="flex items-center space-x-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>
-                      Scout: <strong className="text-black font-bold">{hz.userRole || 'Route Scout'}</strong>
-                    </span>
+                    <CheckCircle2 className="w-3.5 h-3.5 text-leaf" />
+                    <span>{hz.userRole || 'Route scout'}</span>
                   </div>
                   <button
                     onClick={() => onSelectHazardOnMap(hz)}
-                    className="px-3 py-1.5 rounded-lg bg-black hover:bg-neutral-800 text-white font-bold text-xs flex items-center space-x-1 transition-all"
+                    className="px-3 py-1.5 rounded bg-asphalt hover:bg-asphalt-line text-parchment font-medium flex items-center space-x-1 transition-colors"
                   >
-                    <MapPin className="w-3.5 h-3.5 text-white" />
-                    <span>View on Map</span>
+                    <MapPin className="w-3.5 h-3.5" />
+                    <span>View on map</span>
                   </button>
                 </div>
               </div>
@@ -175,38 +157,36 @@ export const HistoricalIntelligencePanel: React.FC<HistoricalIntelligencePanelPr
           })}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {reports.length === 0 && (
-            <p className="text-sm text-neutral-500 italic col-span-2">No driver reports for this corridor yet. Be the first.</p>
+            <p className="text-sm text-parchment-dim italic col-span-2">No driver reports for this corridor yet. Be the first.</p>
           )}
           {reports.map((rep) => (
-            <div key={rep.id} className="bg-white border border-neutral-200 rounded-2xl p-5 space-y-3 transition-all hover:shadow-md">
+            <div key={rep.id} className="bg-asphalt-raised rounded-md p-5 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-black text-white">
-                  {rep.category.replace('_', ' ').toUpperCase()}
-                </span>
-                <span className="text-xs font-mono text-neutral-500 font-bold">{new Date(rep.timestamp).toLocaleString()}</span>
+                <span className="text-xs font-medium text-danfo">{rep.category.replace('_', ' ')}</span>
+                <span className="text-xs text-parchment-dim">{new Date(rep.timestamp).toLocaleString()}</span>
               </div>
 
-              <h3 className="text-base font-black text-black">{rep.title}</h3>
+              <h3 className="text-base font-semibold text-parchment">{rep.title}</h3>
 
               {rep.pidginTranscription && (
-                <div className="bg-[#FAF9F6] p-3 rounded-xl border border-neutral-200">
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-black block">Voice Note Transcription:</span>
-                  <p className="text-xs font-medium text-neutral-900 italic">"{rep.pidginTranscription}"</p>
+                <div className="bg-asphalt p-3 rounded">
+                  <span className="text-xs text-danfo block mb-0.5">Voice note</span>
+                  <p className="text-sm text-parchment">{rep.pidginTranscription}</p>
                 </div>
               )}
 
-              <p className="text-xs text-neutral-700 font-medium">{rep.description}</p>
+              <p className="text-sm text-parchment-dim">{rep.description}</p>
 
-              <div className="pt-3 border-t border-neutral-200 flex items-center justify-between text-xs">
-                <div className="flex items-center space-x-2 text-neutral-600">
-                  <span className="font-bold text-black">{rep.reporterAlias}</span>
-                  <span className="px-2 py-0.5 rounded text-[10px] bg-neutral-100 text-neutral-800 font-bold">{rep.reporterBadge}</span>
+              <div className="pt-3 border-t border-asphalt-line flex items-center justify-between text-xs">
+                <div className="flex items-center space-x-2 text-parchment-dim">
+                  <span className="text-parchment font-medium">{rep.reporterAlias}</span>
+                  <span className="text-parchment-dim">{rep.reporterBadge}</span>
                 </div>
                 <button
                   onClick={() => onVerifyReport(rep.id)}
-                  className="px-3 py-1.5 rounded-xl bg-black hover:bg-neutral-800 text-white font-bold flex items-center space-x-1.5 transition-all shadow-sm"
+                  className="px-3 py-1.5 rounded bg-asphalt hover:bg-asphalt-line text-parchment font-medium flex items-center space-x-1.5 transition-colors"
                 >
                   <ThumbsUp className="w-3.5 h-3.5" />
                   <span>Verify ({rep.verifiedCount})</span>

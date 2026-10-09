@@ -9,7 +9,7 @@ import { UserReport } from './src/types.js';
 const app = express();
 app.use(express.json({ limit: '10mb' }));
 
-// Initialize Google Gen AI (optional — the app degrades gracefully without a key)
+// Initialize Google Gen AI (optional, the app degrades gracefully without a key)
 const apiKey = process.env.GEMINI_API_KEY || '';
 const ai = apiKey
   ? new GoogleGenAI({
@@ -93,7 +93,7 @@ app.post('/api/reports', (req, res) => {
   const reportData = req.body || {};
 
   // Basic shape validation. This is a single-corridor MVP, not hardened
-  // for public traffic — there's still no auth or rate limiting here.
+  // for public traffic. There's still no auth or rate limiting here.
   if (typeof reportData.lat !== 'number' || typeof reportData.lng !== 'number') {
     return res.status(400).json({ success: false, message: 'lat/lng are required numbers' });
   }
@@ -231,7 +231,7 @@ Keep it under 2 sentences. Do not invent a landmark that wasn't given.`;
 // Phonetic respelling helper used by the client's speech-synthesis fallback.
 // IMPORTANT: this does NOT produce audio. It returns a respelled text string
 // meant to nudge the browser's built-in voice toward Pidgin cadence. There is
-// no real Nigerian Pidgin voice model behind this — see audioEngine.ts.
+// no real Nigerian Pidgin voice model behind this, see audioEngine.ts.
 app.post('/api/pidgin-tts', async (req, res) => {
   try {
     const { text } = req.body;

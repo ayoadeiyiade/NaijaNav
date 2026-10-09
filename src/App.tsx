@@ -12,7 +12,6 @@ import { CorridorSelector } from './components/CorridorSelector';
 import { ReportMatterModal } from './components/ReportMatterModal';
 import { AudioPhraseBankModal } from './components/AudioPhraseBankModal';
 import { ContributorLeaderboard } from './components/ContributorLeaderboard';
-import { ApiKeyModal } from './components/ApiKeyModal';
 import { announcePidginCue } from './lib/audioEngine';
 
 export default function App() {
@@ -36,7 +35,6 @@ export default function App() {
   const [isReportModalOpen, setIsReportModalOpen] = useState<boolean>(false);
   const [isPhraseBankOpen, setIsPhraseBankOpen] = useState<boolean>(false);
   const [isLeaderboardOpen, setIsLeaderboardOpen] = useState<boolean>(false);
-  const [isKeyModalOpen, setIsKeyModalOpen] = useState<boolean>(false);
 
   const [, setSelectedLandmark] = useState<Landmark | null>(null);
   const [selectedHazard, setSelectedHazard] = useState<RoadHazard | null>(null);
@@ -44,7 +42,7 @@ export default function App() {
   // Real device location for "Report Matter" pins. null until we get a
   // successful fix (or the user denies/lacks geolocation), at which point
   // we fall back to the active corridor's center point rather than a
-  // hardcoded coordinate — the previous build always dropped pins near
+  // hardcoded coordinate. The previous build always dropped pins near
   // Ikorodu Road regardless of which corridor was active.
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [locationDenied, setLocationDenied] = useState<boolean>(false);
@@ -60,9 +58,6 @@ export default function App() {
       { enableHighAccuracy: false, timeout: 8000 }
     );
   }, []);
-
-  const API_KEY = process.env.GOOGLE_MAPS_PLATFORM_KEY || '';
-  const hasValidMapKey = Boolean(API_KEY) && API_KEY !== 'YOUR_API_KEY';
 
   const activeCorridor = corridors.find((c) => c.id === activeCorridorId) || corridors[0];
   const activeWaypoints = activeCorridor.waypoints;
@@ -175,14 +170,12 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF9F6] text-black font-sans selection:bg-black selection:text-white flex flex-col">
+    <div className="min-h-screen bg-asphalt text-parchment font-body selection:bg-danfo selection:text-asphalt flex flex-col">
       <Navbar
         activeCorridorName={activeCorridor.name}
         onOpenReportModal={() => setIsReportModalOpen(true)}
         onOpenPhraseBankModal={() => setIsPhraseBankOpen(true)}
         onOpenLeaderboardModal={() => setIsLeaderboardOpen(true)}
-        onOpenKeyModal={() => setIsKeyModalOpen(true)}
-        hasValidMapKey={hasValidMapKey}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
@@ -221,7 +214,6 @@ export default function App() {
               isSimulating={isSimulating}
               onSelectLandmark={setSelectedLandmark}
               onSelectHazard={setSelectedHazard}
-              hasValidKey={hasValidMapKey}
             />
           </div>
         )}
@@ -262,14 +254,12 @@ export default function App() {
 
       <ContributorLeaderboard isOpen={isLeaderboardOpen} onClose={() => setIsLeaderboardOpen(false)} reports={reports} />
 
-      <ApiKeyModal isOpen={isKeyModalOpen} onClose={() => setIsKeyModalOpen(false)} hasValidKey={hasValidMapKey} />
-
-      <footer className="bg-white border-t border-neutral-200 text-xs text-neutral-600 py-6 text-center">
+      <footer className="border-t border-asphalt-line text-xs text-parchment-dim py-6 text-center">
         <div className="max-w-7xl mx-auto px-4">
-          <p className="font-bold text-black">NaijaNav — Localized Nigerian Turn-by-Turn Navigation & Road Intelligence</p>
-          <p className="text-[11px] text-neutral-500 mt-1 font-medium">
-            Landmark-based Pidgin-flavored voice cues, seeded road intelligence & driver reporting.
-            {locationDenied ? ' Location access unavailable — reports will pin to the corridor center.' : ''}
+          <p className="font-display text-sm tracking-wide text-parchment">NaijaNav, Nigerian Turn-by-Turn Navigation</p>
+          <p className="text-[11px] mt-1">
+            Landmark-based Pidgin-flavored voice cues, seeded road intelligence and driver reporting.
+            {locationDenied ? ' Location access unavailable, reports will pin to the corridor center.' : ''}
           </p>
         </div>
       </footer>

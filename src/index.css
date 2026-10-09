@@ -1,1 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap');
+@import "leaflet/dist/leaflet.css";
 @import "tailwindcss";
+
+@theme {
+  --color-asphalt: #15130f;
+  --color-asphalt-raised: #211e17;
+  --color-asphalt-line: #332e22;
+  --color-parchment: #f4efe2;
+  --color-parchment-dim: #b7ae98;
+  --color-danfo: #ffc233;
+  --color-danfo-dim: #c99415;
+  --color-rust: #e2512b;
+  --color-leaf: #2fa866;
+
+  --font-display: 'Oswald', 'Arial Narrow', sans-serif;
+  --font-body: 'Work Sans', sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-asphalt);
+  color: var(--color-parchment);
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: var(--color-asphalt-raised);
+  color: var(--color-parchment);
+}
+.leaflet-popup-content a {
+  color: var(--color-danfo);
+}
+.leaflet-container {
+  background: var(--color-asphalt);
+}

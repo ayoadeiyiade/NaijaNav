@@ -9,7 +9,7 @@
  * pronunciation and pacing with light word substitutions and rate/pitch
  * tuning. That's a legitimate technique for an MVP, but don't let UI
  * copy or code comments oversell it as an "AI voice model" or "LLM
- * preset" — it isn't one. See /api/pidgin-tts in server.ts for the
+ * preset", it isn't one. See /api/pidgin-tts in server.ts for the
  * (optional, Gemini-backed) server-side half of this same workaround.
  */
 
@@ -155,7 +155,7 @@ export function speakPidginPhonetic(text: string, accentMode: VoiceStyle = 'Lago
 /**
  * Ask the server for a Gemini-naturalized phonetic respelling of the text,
  * then speak that respelling client-side. This is still browser TTS under
- * the hood — the server call only improves the *text* fed into it, it does
+ * the hood. The server call only improves the *text* fed into it, it does
  * not produce audio itself. Returns false on any failure so the caller can
  * fall back to pure client-side naturalization.
  */

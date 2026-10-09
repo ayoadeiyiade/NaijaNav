@@ -17,7 +17,7 @@
 - Deleted `/api/pidgin-models` entirely. It listed four fabricated "models"
   (e.g. "Warri Sharp Regional LLM", "AfroPhonetic Natural Voice Engine")
   that don't exist and weren't backed by anything real.
-- `NavigationHUD.tsx`: renamed "Pidgin LLM Preset" to "Voice Style" — the
+- `NavigationHUD.tsx`: renamed "Pidgin LLM Preset" to "Voice Style", the
   accent picker is a browser-speech-synthesis tuning preset (word swaps +
   pitch/rate), not a distinct AI voice model, and shouldn't be labeled as one.
 - `/api/pidgin-tts`: renamed/commented to make clear it returns a phonetic
@@ -41,3 +41,11 @@
 - Route "simulation" is scripted waypoint playback, not live GPS navigation.
 - In-memory report store, no auth/rate limiting, no persistence.
 - Simulated vehicle position is straight-line interpolation, not road-snapped.
+
+## Map and UI redesign
+- Map now runs on Leaflet with CARTO dark tiles (OpenStreetMap data). No API key, no billing account.
+- Removed the Google Maps dependency, key modal, and canvas fallback.
+- Visual redesign: dark asphalt base, danfo yellow accent, rust red for alerts, green for verified.
+  Oswald for headlines and numbers, Work Sans for body text.
+- Dropped the uppercase tracked labels, monospace digits, and identical rounded shadow cards.
+- Removed every em dash from UI copy, comments, and docs.
