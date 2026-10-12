@@ -49,3 +49,8 @@
   Oswald for headlines and numbers, Work Sans for body text.
 - Dropped the uppercase tracked labels, monospace digits, and identical rounded shadow cards.
 - Removed every em dash from UI copy, comments, and docs.
+
+## Live reports on the map
+- Driver reports now show as rust-red "!" pins on the map, with a popup (title, voice note text, reporter, time ago, Verify button).
+- The app re-fetches reports every 30 seconds while the tab is visible, and again when the tab regains focus.
+- Still true: reports live in server memory and reset on restart. Next step is a free database.

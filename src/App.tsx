@@ -96,6 +96,34 @@ export default function App() {
     loadBackendData();
   }, []);
 
+  // Keep driver reports fresh. Re-fetch every 30 seconds while the tab is
+  // visible, and once more whenever the tab regains focus, so a report
+  // someone else submits shows up without a manual refresh.
+  useEffect(() => {
+    let cancelled = false;
+
+    async function refreshReports() {
+      if (document.visibilityState !== 'visible') return;
+      try {
+        const res = await fetch('/api/reports');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!cancelled && Array.isArray(data.reports)) setReports(data.reports);
+      } catch {
+        // Network blip: keep showing what we already have.
+      }
+    }
+
+    const interval = setInterval(refreshReports, 30000);
+    document.addEventListener('visibilitychange', refreshReports);
+
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', refreshReports);
+    };
+  }, []);
+
   // Route Simulation Timer Loop
   useEffect(() => {
     if (!isSimulating) return;
@@ -214,6 +242,8 @@ export default function App() {
               isSimulating={isSimulating}
               onSelectLandmark={setSelectedLandmark}
               onSelectHazard={setSelectedHazard}
+              reports={corridorReports}
+              onVerifyReport={handleVerifyReport}
             />
           </div>
         )}

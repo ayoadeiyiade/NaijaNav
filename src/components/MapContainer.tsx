@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { MapContainer as LeafletMap, TileLayer, Marker, Popup, Polyline, ZoomControl } from 'react-leaflet';
 import L from 'leaflet';
-import { RouteCorridor, Landmark, RoadHazard } from '../types';
+import { RouteCorridor, Landmark, RoadHazard, UserReport } from '../types';
 import { MapPin, Compass, Sparkles } from 'lucide-react';
 
 interface MapContainerProps {
@@ -13,6 +13,17 @@ interface MapContainerProps {
   isSimulating: boolean;
   onSelectLandmark: (landmark: Landmark) => void;
   onSelectHazard: (hazard: RoadHazard) => void;
+  reports: UserReport[];
+  onVerifyReport: (reportId: string) => void;
+}
+
+function timeAgo(iso: string): string {
+  const mins = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000));
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins} min ago`;
+  const hrs = Math.round(mins / 60);
+  if (hrs < 24) return `${hrs} hr ago`;
+  return `${Math.round(hrs / 24)} d ago`;
 }
 
 /**
@@ -43,6 +54,8 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   simulationProgress,
   onSelectLandmark,
   onSelectHazard,
+  reports,
+  onVerifyReport,
 }) => {
   const waypoints = corridor.waypoints;
   const currentWp = waypoints[currentWaypointIndex] || waypoints[0];
@@ -59,6 +72,9 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 
   const vehicleIcon = useMemo(() => dotIcon('#000000', 34, '🚗'), []);
   const landmarkIcon = useMemo(() => dotIcon('#171717', 26, '📍'), []);
+  // Driver reports get a rust-red dot with a "!" so they read differently
+  // from seeded hazards (amber or red with a warning sign).
+  const reportIcon = useMemo(() => dotIcon('#e2512b', 24, '<b>!</b>'), []);
   const hazardIcon = (severity: string) => dotIcon(severity === 'critical' ? '#dc2626' : '#d97706', 26, '⚠️');
 
   return (
@@ -72,6 +88,9 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         <div className="bg-danfo text-asphalt px-3 py-1.5 rounded-md text-xs font-semibold flex items-center space-x-1.5 pointer-events-auto">
           <Sparkles className="w-3.5 h-3.5" />
           <span>{landmarks.length} landmarks seeded</span>
+        </div>
+        <div className="bg-rust text-parchment px-3 py-1.5 rounded-md text-xs font-semibold pointer-events-auto">
+          {reports.length} driver {reports.length === 1 ? 'report' : 'reports'}
         </div>
       </div>
 
@@ -126,6 +145,38 @@ export const MapContainer: React.FC<MapContainerProps> = ({
                 <strong>{hz.title}</strong>
                 <br />
                 {hz.description}
+              </Popup>
+            </Marker>
+          ))}
+
+          {reports.map((rep) => (
+            <Marker key={rep.id} position={[rep.lat, rep.lng]} icon={reportIcon}>
+              <Popup>
+                <div className="space-y-1" style={{ minWidth: 200 }}>
+                  <div style={{ color: '#e2512b', fontSize: 12 }}>
+                    Driver report, {timeAgo(rep.timestamp)}
+                  </div>
+                  <strong>{rep.title}</strong>
+                  {rep.pidginTranscription && <div>{rep.pidginTranscription}</div>}
+                  <div style={{ fontSize: 12, opacity: 0.8 }}>
+                    {rep.reporterAlias}, {rep.verifiedCount} verified
+                  </div>
+                  <button
+                    onClick={() => onVerifyReport(rep.id)}
+                    style={{
+                      marginTop: 4,
+                      padding: '4px 10px',
+                      borderRadius: 4,
+                      background: '#ffc233',
+                      color: '#15130f',
+                      fontWeight: 600,
+                      fontSize: 12,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Verify
+                  </button>
+                </div>
               </Popup>
             </Marker>
           ))}
